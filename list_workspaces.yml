@@ -1,0 +1,21 @@
+---
+- name: List Webex workspaces
+  hosts: local
+  gather_facts: false
+  vars:
+    webex_token: "{{ lookup('env', 'WEBEX_TOKEN') }}"
+  tasks:
+    - name: Call Webex API
+      uri:
+        url: https://webexapis.com/v1/workspaces
+        method: GET
+        headers:
+          Authorization: "Bearer {{ webex_token }}"
+        return_content: true
+      register: result
+
+    - name: Print workspace names
+      debug:
+        msg: "{{ item.displayName }}"
+      loop: "{{ result.json['items'] | list }}"
+      when: "'Room' in item.displayName"
