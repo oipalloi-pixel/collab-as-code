@@ -1,2 +1,5 @@
 .env
 *.token
+.terraform/
+*.tfstate*
+*.tfstate.backup
