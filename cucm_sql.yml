@@ -1,0 +1,32 @@
+---
+- name: Query device with model and directory number
+  hosts: localhost
+  gather_facts: false
+  vars:
+    axl_hostname: "{{ lookup('env', 'CUCM_HOST') }}"
+    axl_user: "{{ lookup('env', 'CUCM_USER') }}"
+    axl_password: "{{ lookup('env', 'CUCM_PASS') }}"
+    axl_version: "12.5"
+  tasks:
+    - name: Run SQL query
+      cisco.ucm.axl_sql_select:
+        hostname: "{{ axl_hostname }}"
+        username: "{{ axl_user }}"
+        password: "{{ axl_password }}"
+        verify: false
+        version: "{{ axl_version }}"
+        sql: >-
+          SELECT d.name, tm.name AS model, np.dnorpattern AS pattern
+          FROM device d
+          LEFT JOIN typemodel tm ON d.tkmodel = tm.enum
+          LEFT JOIN devicenumplanmap dnpm ON dnpm.fkdevice = d.pkid
+          LEFT JOIN numplan np ON np.pkid = dnpm.fknumplan
+          WHERE d.name=?
+          ORDER BY 1
+        args:
+          - "SEP001E7AC4DD0A"
+      register: device_result
+
+    - name: Print result
+      debug:
+        var: device_result
