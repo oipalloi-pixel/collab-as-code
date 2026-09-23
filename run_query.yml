@@ -1,0 +1,11 @@
+---
+- name: Run CUCM AXL Operations
+  hosts: cucm_pub
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: List phones
+      include_tasks: list_phones.yml
+
+    - name: Execute SQL Query
+      include_tasks: query_cucm_sql.yml

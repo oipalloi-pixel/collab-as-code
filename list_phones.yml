@@ -1,0 +1,23 @@
+- name: List phones
+  cisco.ucm.axl:
+    hostname: "{{ axl_hostname }}"
+    username: "{{ axl_user }}"
+    password: "{{ axl_password }}"
+    verify: "{{ axl_verify | default(true) }}"
+    version: "{{ axl_version }}"
+    operation: "listPhone"
+    args:
+      searchCriteria:
+        name: "%"
+      returnedTags:
+        name: ""
+        product: ""
+        model: ""
+        class: ""
+        protocol: ""
+        protocolSide: ""
+        callingSearchSpaceName: ""
+        devicePoolName: ""
+      skip: 0
+      first: 10
+  register: uc_axl_response

@@ -1,0 +1,12 @@
+- name: Execute SQL Query with parameters
+  cisco.ucm.axl_sql_select:
+    hostname: "{{ axl_hostname }}"
+    username: "{{ axl_user }}"
+    password: "{{ axl_password }}"
+    verify: "{{ axl_verify | default(true) }}"
+    version: "{{ axl_version }}"
+    sql: |
+      SELECT name, tkmodel, description FROM device WHERE name=? ORDER BY 1
+    args:
+      - "SEPAAABBBCCCDDD"
+  register: device_result
